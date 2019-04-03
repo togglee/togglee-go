@@ -1,16 +1,13 @@
 language: go
 go:
   - "1.12"
-environment:
+env:
   - GO111MODULE=on
-
 before_install:
   - go get -t -v ./...
-
 script:
   - make lint-prepare
   - make lint
   - make test
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
