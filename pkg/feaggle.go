@@ -19,8 +19,8 @@ func (h FeaggleBuilder) AddDriver(driver models.Driver) FeaggleBuilder {
 }
 
 // Create -- Creates an instance of the feature toggle resolver
-func (h FeaggleBuilder) Create() Feaggle {
-	return Feaggle {
+func (h FeaggleBuilder) Create() *Feaggle {
+	return &Feaggle {
 		drivers: h.drivers,
 	}
 }
