@@ -6,8 +6,7 @@ env:
 before_install:
   - go get -t -v ./...
 script:
-  - make lint-prepare
-  - make lint
-  - make test
+  - make prepare
+  - make test-ci
 after_success:
   - bash <(curl -s https://codecov.io/bash)
