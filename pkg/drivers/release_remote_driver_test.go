@@ -1,143 +1,83 @@
 package drivers_test
 
 import (
-	"fmt"
 	"github.com/feaggle/feaggle/pkg/drivers"
+	. "github.com/feaggle/feaggle/pkg/models"
+	"github.com/feaggle/feaggle/pkg/models/mocks"
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
-type fakeHandler struct {
-	expectedResult bool
-	failNextCalls bool
-	callCount int
-}
-
-func (h *fakeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.callCount+=1
-	if h.failNextCalls && h.callCount > 1 {
-		panic("DOES NOT EXIST")
-		return
-	}
-	result := fmt.Sprintf(`{
-							"releases": [
-								{
-									"name": "TOGGLE_NAME",
-									"active": %v
-								}
-							]
-						}`, h.expectedResult)
-	if r.URL.Path == "/myProject/toggles" {
-		_, _ = fmt.Fprint(w, result)
-		return
-	} else if  r.URL.Path == "/wrongBody/toggles" {
-		_, _ = fmt.Fprint(w, "pepe")
-		return
-	} else if  r.URL.Path == "/panic/toggles" {
-		panic("DOES NOT EXIST")
-		return
-	}
-	panic("WHY ARE YOU HERE")
-}
-
 func Test_Release_Remote_Driver(t *testing.T) {
-	t.Run("takes true value from remote", func(t *testing.T) {
-		handler := &fakeHandler{
-			expectedResult: true,
-			failNextCalls: false,
-			callCount: 0,
+	t.Run("takes true value from cache", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		defer controller.Finish()
+		toggleCacheMock := mocks.NewMockToggleCache(controller)
+		toggleCacheMock.EXPECT().Validate().Times(1)
+		toggles := &Toggles{
+			Releases:
+			[]ReleaseToggle{
+				{Name: "SOME_OTHER_TOGGLE_NAME", Active: false},
+				{Name: "TOGGLE_NAME", Active: true},
+			},
 		}
-		server := httptest.NewServer(handler)
-		defer server.Close()
-		driver := drivers.ReleaseRemoteDriver{
-			URL: server.URL,
-			Project: "myProject",
+		toggleCacheMock.EXPECT().Cache().Return(toggles).Times(1)
+		driver:= drivers.ReleaseRemoteDriver{
+			Cache: toggleCacheMock,
 		}
-		result := driver.IsActive("TOGGLE_NAME")
-		assert.True(t, *result)
+		assert.True(t, *driver.IsActive("TOGGLE_NAME"))
 	})
 
-	t.Run("takes false value from remote", func(t *testing.T) {
-		handler := &fakeHandler{
-			expectedResult: false,
-			failNextCalls: false,
-			callCount: 0,
+	t.Run("takes false value from cache", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		defer controller.Finish()
+		toggleCacheMock := mocks.NewMockToggleCache(controller)
+		toggleCacheMock.EXPECT().Validate().Times(1)
+		toggles := &Toggles{
+			Releases:
+			[]ReleaseToggle{
+				{Name: "SOME_OTHER_TOGGLE_NAME", Active: true},
+				{Name: "TOGGLE_NAME", Active: false},
+			},
 		}
-		server := httptest.NewServer(handler)
-		defer server.Close()
-		driver := drivers.ReleaseRemoteDriver{
-			URL: server.URL,
-			Project: "myProject",
+		toggleCacheMock.EXPECT().Cache().Return(toggles).Times(1)
+		driver:= drivers.ReleaseRemoteDriver{
+			Cache: toggleCacheMock,
 		}
-		result := driver.IsActive("TOGGLE_NAME")
-		assert.False(t, *result)
+		assert.False(t, *driver.IsActive("TOGGLE_NAME"))
 	})
 
-	t.Run("if no remote return nil", func(t *testing.T) {
-		handler := &fakeHandler{
-			expectedResult: false,
-			failNextCalls: false,
-			callCount: 0,
+	t.Run("returns false if not found", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		defer controller.Finish()
+		toggleCacheMock := mocks.NewMockToggleCache(controller)
+		toggleCacheMock.EXPECT().Validate().Times(1)
+		toggles := &Toggles{
+			Releases: []ReleaseToggle{
+				{Name: "SOME_OTHER_TOGGLE_NAME", Active: true},
+				{Name: "SOME_MORE_TOGGLE_NAME", Active: true},
+			},
 		}
-		server := httptest.NewServer(handler)
-		defer server.Close()
-		driver := drivers.ReleaseRemoteDriver{
-			URL: server.URL,
-			Project: "panic",
+		toggleCacheMock.EXPECT().Cache().Return(toggles).Times(1)
+		driver:= drivers.ReleaseRemoteDriver{
+			Cache: toggleCacheMock,
 		}
-		result := driver.IsActive("TOGGLE_NAME")
-		assert.Nil(t, result)
+		assert.Nil(t, driver.IsActive("TOGGLE_NAME"))
 	})
 
-	t.Run("if wrong body return nil", func(t *testing.T) {
-		handler := &fakeHandler{
-			expectedResult: false,
-			failNextCalls: false,
-			callCount: 0,
+	t.Run("returns false if not valid toggles", func(t *testing.T) {
+		controller := gomock.NewController(t)
+		defer controller.Finish()
+		toggleCacheMock := mocks.NewMockToggleCache(controller)
+		toggleCacheMock.EXPECT().Validate().Times(1)
+		toggles := &Toggles{
+			Releases: nil,
 		}
-		server := httptest.NewServer(handler)
-		defer server.Close()
-		driver := drivers.ReleaseRemoteDriver{
-			URL: server.URL,
-			Project: "wrongBody",
+		toggleCacheMock.EXPECT().Cache().Return(toggles).Times(1)
+		driver:= drivers.ReleaseRemoteDriver{
+			Cache: toggleCacheMock,
 		}
-		result := driver.IsActive("TOGGLE_NAME")
-		assert.Nil(t, result)
-	})
-
-	t.Run("if toggle does not exist return nil", func(t *testing.T) {
-		handler := &fakeHandler{
-			expectedResult: false,
-			failNextCalls: false,
-			callCount: 0,
-		}
-		server := httptest.NewServer(handler)
-		defer server.Close()
-		driver := drivers.ReleaseRemoteDriver{
-			URL: server.URL,
-			Project: "myProject",
-		}
-		result := driver.IsActive("OTHER_TOGGLE_NAME")
-		assert.Nil(t, result)
-	})
-
-	t.Run("if service is down return last know value", func(t *testing.T) {
-		handler := &fakeHandler{
-			expectedResult: true,
-			failNextCalls: true,
-			callCount: 0,
-		}
-		server := httptest.NewServer(handler)
-		defer server.Close()
-		driver := drivers.ReleaseRemoteDriver{
-			URL: server.URL,
-			Project: "myProject",
-		}
-		result := driver.IsActive("TOGGLE_NAME")
-		assert.True(t, *result)
-		result = driver.IsActive("TOGGLE_NAME")
-		assert.True(t, *result)
+		assert.Nil(t, driver.IsActive("TOGGLE_NAME"))
 	})
 }
