@@ -11,6 +11,6 @@ import (
 func Test_Integration_Toggle(t *testing.T) {
 
 	os.Setenv("FAKE_TOGGLE_ENVIRONMENT_VARIABLE", "true")
-	feaggle := FeaggleBuilder{}.AddDriver(drivers.ReleaseEnvironmentDriver{}).Create()
+	feaggle := FeaggleBuilder{}.AddDriver(&drivers.ReleaseEnvironmentDriver{}).Create()
 	assert.True(t, feaggle.IsActive("FAKE_TOGGLE_ENVIRONMENT_VARIABLE"), "if is true, returns true")
 }
