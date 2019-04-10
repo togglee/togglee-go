@@ -2,18 +2,10 @@ package drivers
 
 import (
 	"encoding/json"
+	. "github.com/feaggle/feaggle/pkg/models"
 	"io/ioutil"
 	"net/http"
 )
-
-type Toggles struct {
-	Releases []ReleaseToggle
-}
-
-type ReleaseToggle struct {
-	Name string
-	Active bool
-}
 
 // ReleaseDriver -- release toggles driver resolver
 type ReleaseRemoteDriver struct {
