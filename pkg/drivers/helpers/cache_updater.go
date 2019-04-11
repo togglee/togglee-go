@@ -33,7 +33,8 @@ func NewToggleCacheImp(project string, url string, expiration time.Duration) Tog
 	tc.OnEvicted(func(k string, v interface{}) {
 		toggles := refreshToggles(project, url)
 		if toggles == nil {
-			return
+			tcl, _ := tc.Get("toggles")
+			toggles = tcl.(*Toggles)
 		}
 		tc.Set("toggles", toggles, cache.DefaultExpiration)
 	})
