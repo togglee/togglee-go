@@ -14,7 +14,6 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		controller := gomock.NewController(t)
 		defer controller.Finish()
 		toggleCacheMock := mocks.NewMockToggleCache(controller)
-		toggleCacheMock.EXPECT().Validate().Times(1)
 		toggles := &Toggles{
 			Releases:
 			[]ReleaseToggle{
@@ -22,7 +21,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 				{Name: "TOGGLE_NAME", Active: true},
 			},
 		}
-		toggleCacheMock.EXPECT().Cache().Return(toggles).Times(1)
+		toggleCacheMock.EXPECT().Toggles().Return(toggles).Times(1)
 		driver:= drivers.ReleaseRemoteDriver{
 			Cache: toggleCacheMock,
 		}
@@ -33,7 +32,6 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		controller := gomock.NewController(t)
 		defer controller.Finish()
 		toggleCacheMock := mocks.NewMockToggleCache(controller)
-		toggleCacheMock.EXPECT().Validate().Times(1)
 		toggles := &Toggles{
 			Releases:
 			[]ReleaseToggle{
@@ -41,7 +39,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 				{Name: "TOGGLE_NAME", Active: false},
 			},
 		}
-		toggleCacheMock.EXPECT().Cache().Return(toggles).Times(1)
+		toggleCacheMock.EXPECT().Toggles().Return(toggles).Times(1)
 		driver:= drivers.ReleaseRemoteDriver{
 			Cache: toggleCacheMock,
 		}
@@ -52,14 +50,13 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		controller := gomock.NewController(t)
 		defer controller.Finish()
 		toggleCacheMock := mocks.NewMockToggleCache(controller)
-		toggleCacheMock.EXPECT().Validate().Times(1)
 		toggles := &Toggles{
 			Releases: []ReleaseToggle{
 				{Name: "SOME_OTHER_TOGGLE_NAME", Active: true},
 				{Name: "SOME_MORE_TOGGLE_NAME", Active: true},
 			},
 		}
-		toggleCacheMock.EXPECT().Cache().Return(toggles).Times(1)
+		toggleCacheMock.EXPECT().Toggles().Return(toggles).Times(1)
 		driver:= drivers.ReleaseRemoteDriver{
 			Cache: toggleCacheMock,
 		}
@@ -70,11 +67,10 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		controller := gomock.NewController(t)
 		defer controller.Finish()
 		toggleCacheMock := mocks.NewMockToggleCache(controller)
-		toggleCacheMock.EXPECT().Validate().Times(1)
 		toggles := &Toggles{
 			Releases: nil,
 		}
-		toggleCacheMock.EXPECT().Cache().Return(toggles).Times(1)
+		toggleCacheMock.EXPECT().Toggles().Return(toggles).Times(1)
 		driver:= drivers.ReleaseRemoteDriver{
 			Cache: toggleCacheMock,
 		}

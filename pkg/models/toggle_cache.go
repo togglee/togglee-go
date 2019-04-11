@@ -3,6 +3,5 @@
 package models
 
 type ToggleCache interface {
-	Validate()
-	Cache() *Toggles
+	Toggles() *Toggles
 }

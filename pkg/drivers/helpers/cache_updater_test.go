@@ -52,12 +52,8 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := ToggleCacheImp{
-			URL: server.URL,
-			Project: "myProject",
-		}
-		driver.Validate()
-		assert.Equal(t, driver.Cache(), &Toggles{
+		driver := NewToggleCacheImp("myProject", server.URL, 0)
+		assert.Equal(t, driver.Toggles(), &Toggles{
 			Releases:
 				[]ReleaseToggle{
 					{Name: "TOGGLE_NAME", Active: true},
@@ -73,12 +69,8 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := ToggleCacheImp{
-			URL: server.URL,
-			Project: "myProject",
-		}
-		driver.Validate()
-		assert.Equal(t, driver.Cache(), &Toggles{
+		driver := NewToggleCacheImp("myProject", server.URL , 0)
+		assert.Equal(t, driver.Toggles(), &Toggles{
 			Releases:
 			[]ReleaseToggle{
 				{Name: "TOGGLE_NAME", Active: false},
@@ -94,12 +86,8 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := ToggleCacheImp{
-			URL: server.URL,
-			Project: "panic",
-		}
-		driver.Validate()
-		assert.Equal(t, driver.Cache(), &Toggles{ Releases: nil })
+		driver := NewToggleCacheImp("panic", server.URL, 0)
+		assert.Equal(t, driver.Toggles(), &Toggles{ Releases: nil })
 	})
 
 	t.Run("if wrong body return nil", func(t *testing.T) {
@@ -110,12 +98,8 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := ToggleCacheImp{
-			URL: server.URL,
-			Project: "wrongBody",
-		}
-		driver.Validate()
-		assert.Equal(t, driver.Cache(), &Toggles{ Releases: nil })
+		driver := NewToggleCacheImp("wrongBody", server.URL, 0)
+		assert.Equal(t, driver.Toggles(), &Toggles{ Releases: nil })
 	})
 
 	t.Run("if service is down return last know value", func(t *testing.T) {
@@ -126,19 +110,14 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := ToggleCacheImp{
-			URL: server.URL,
-			Project: "myProject",
-		}
-		driver.Validate()
-		assert.Equal(t, driver.Cache(), &Toggles{
+		driver := NewToggleCacheImp("myProject", server.URL, 0)
+		assert.Equal(t, driver.Toggles(), &Toggles{
 			Releases:
 			[]ReleaseToggle{
 				{Name: "TOGGLE_NAME", Active: true},
 			},
 		})
-		driver.Validate()
-		assert.Equal(t, driver.Cache(), &Toggles{
+		assert.Equal(t, driver.Toggles(), &Toggles{
 			Releases:
 			[]ReleaseToggle{
 				{Name: "TOGGLE_NAME", Active: true},

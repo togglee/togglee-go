@@ -33,28 +33,16 @@ func (m *MockToggleCache) EXPECT() *MockToggleCacheMockRecorder {
 	return m.recorder
 }
 
-// Validate mocks base method
-func (m *MockToggleCache) Validate() {
+// Toggles mocks base method
+func (m *MockToggleCache) Toggles() *x.Toggles {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Validate")
-}
-
-// Validate indicates an expected call of Validate
-func (mr *MockToggleCacheMockRecorder) Validate() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Validate", reflect.TypeOf((*MockToggleCache)(nil).Validate))
-}
-
-// Cache mocks base method
-func (m *MockToggleCache) Cache() *x.Toggles {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Cache")
+	ret := m.ctrl.Call(m, "Toggles")
 	ret0, _ := ret[0].(*x.Toggles)
 	return ret0
 }
 
-// Cache indicates an expected call of Cache
-func (mr *MockToggleCacheMockRecorder) Cache() *gomock.Call {
+// Toggles indicates an expected call of Toggles
+func (mr *MockToggleCacheMockRecorder) Toggles() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Cache", reflect.TypeOf((*MockToggleCache)(nil).Cache))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Toggles", reflect.TypeOf((*MockToggleCache)(nil).Toggles))
 }

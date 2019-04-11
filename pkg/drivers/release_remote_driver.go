@@ -11,9 +11,8 @@ type ReleaseRemoteDriver struct {
 
 // IsActive -- release toggles driver resolver function
 func (h *ReleaseRemoteDriver) IsActive(name string) *bool {
-	h.Cache.Validate()
-	cache := h.Cache.Cache()
-	for _, value := range cache.Releases {
+	toggles := h.Cache.Toggles()
+	for _, value := range toggles.Releases {
 		if value.Name == name {
 			return &value.Active
 		}
