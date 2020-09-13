@@ -1,2 +1,2 @@
-# feaggle-go
-go library for feaggle
+# togglee-go
+go library for togglee
