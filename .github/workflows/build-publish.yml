@@ -25,4 +25,4 @@ jobs:
             ${{ runner.os }}-go-
       - run: go get -t -v ./...
       - run: make prepare
-      - run: test-ci
+      - run: make test-ci
