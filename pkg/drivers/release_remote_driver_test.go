@@ -1,9 +1,9 @@
 package drivers_test
 
 import (
-	"github.com/feaggle/feaggle/pkg/drivers"
-	. "github.com/feaggle/feaggle/pkg/models"
-	"github.com/feaggle/feaggle/pkg/models/mocks"
+	"github.com/togglee/togglee-go/pkg/drivers"
+	. "github.com/togglee/togglee-go/pkg/models"
+	"github.com/togglee/togglee-go/pkg/models/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"

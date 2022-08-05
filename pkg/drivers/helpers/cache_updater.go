@@ -2,7 +2,7 @@ package helpers
 
 import (
 	"encoding/json"
-	. "github.com/feaggle/feaggle/pkg/models"
+	. "github.com/togglee/togglee-go/pkg/models"
 	"github.com/patrickmn/go-cache"
 	"io/ioutil"
 	"net/http"

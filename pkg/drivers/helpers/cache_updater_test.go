@@ -2,8 +2,8 @@ package helpers_test
 
 import (
 	"fmt"
-	. "github.com/feaggle/feaggle/pkg/drivers/helpers"
-	. "github.com/feaggle/feaggle/pkg/models"
+	. "github.com/togglee/togglee-go/pkg/drivers/helpers"
+	. "github.com/togglee/togglee-go/pkg/models"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"

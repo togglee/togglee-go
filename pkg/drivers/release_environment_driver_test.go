@@ -1,7 +1,7 @@
 package drivers_test
 
 import (
-	"github.com/feaggle/feaggle/pkg/drivers"
+	"github.com/togglee/togglee-go/pkg/drivers"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"

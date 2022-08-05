@@ -1,7 +1,7 @@
 package drivers
 
 import (
-	"github.com/feaggle/feaggle/pkg/models"
+	"github.com/togglee/togglee-go/pkg/models"
 )
 
 // ReleaseDriver -- release toggles driver resolver

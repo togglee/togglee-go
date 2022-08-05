@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	x "github.com/feaggle/feaggle/pkg/models"
+	x "github.com/togglee/togglee-go/pkg/models"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
