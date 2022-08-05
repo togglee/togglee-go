@@ -52,7 +52,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := NewToggleCacheImp("myProject", server.URL, 0)
+		driver := NewToggleCacheImp(fmt.Sprintf("%s/%s", server.URL, "myProject/toggles"), 0)
 		assert.Equal(t, driver.Toggles(), &Toggles{
 			Releases:
 				[]ReleaseToggle{
@@ -69,7 +69,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := NewToggleCacheImp("myProject", server.URL , 0)
+		driver := NewToggleCacheImp(fmt.Sprintf("%s/%s", server.URL, "myProject/toggles"), 0)
 		assert.Equal(t, driver.Toggles(), &Toggles{
 			Releases:
 			[]ReleaseToggle{
@@ -86,7 +86,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := NewToggleCacheImp("panic", server.URL, 0)
+		driver := NewToggleCacheImp(fmt.Sprintf("%s/%s", server.URL, "panic/toggles"), 0)
 		assert.Equal(t, driver.Toggles(), &Toggles{ Releases: nil })
 	})
 
@@ -98,7 +98,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := NewToggleCacheImp("wrongBody", server.URL, 0)
+		driver := NewToggleCacheImp(fmt.Sprintf("%s/%s", server.URL, "wrongBody/toggles"), 0)
 		assert.Equal(t, driver.Toggles(), &Toggles{ Releases: nil })
 	})
 
@@ -110,7 +110,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		}
 		server := httptest.NewServer(handler)
 		defer server.Close()
-		driver := NewToggleCacheImp("myProject", server.URL, 0)
+		driver := NewToggleCacheImp(fmt.Sprintf("%s/%s", server.URL, "myProject/toggles"), 0)
 		assert.Equal(t, driver.Toggles(), &Toggles{
 			Releases:
 			[]ReleaseToggle{

@@ -11,13 +11,12 @@ import (
 
 // ToggleCache -- cache remote updater
 type ToggleCacheImp struct {
-	Project string
 	URL     string
 	cache   *cache.Cache
 }
 
-func refreshToggles(project string, url string) *Toggles{
-	response, err := http.Get(url + "/" + project + "/toggles")
+func refreshToggles(url string) *Toggles{
+	response, err := http.Get(url)
 	toggles := Toggles{}
 	if err == nil {
 		data, _ := ioutil.ReadAll(response.Body)
@@ -26,19 +25,19 @@ func refreshToggles(project string, url string) *Toggles{
 	return &toggles
 }
 
-func NewToggleCacheImp(project string, url string, expiration time.Duration) ToggleCacheImp {
+func NewToggleCacheImp(url string, expiration time.Duration) ToggleCacheImp {
 	tc := cache.New(expiration, 0)
-	toggles := refreshToggles(project, url)
+	toggles := refreshToggles(url)
 	tc.Set("toggles", toggles, cache.DefaultExpiration)
 	tc.OnEvicted(func(k string, v interface{}) {
-		toggles := refreshToggles(project, url)
+		toggles := refreshToggles(url)
 		if toggles == nil {
 			tcl, _ := tc.Get("toggles")
 			toggles = tcl.(*Toggles)
 		}
 		tc.Set("toggles", toggles, cache.DefaultExpiration)
 	})
-	return ToggleCacheImp{ project, url, tc }
+	return ToggleCacheImp{ url, tc }
 }
 
 func (h *ToggleCacheImp) Toggles() *Toggles {

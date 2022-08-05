@@ -10,7 +10,7 @@ type ReleaseRemoteDriver struct {
 }
 
 // IsActive -- release toggles driver resolver function
-func (h *ReleaseRemoteDriver) IsActive(name string) *bool {
+func (h *ReleaseRemoteDriver) IsActive(name string, context map[string]interface{}) *bool {
 	toggles := h.Cache.Toggles()
 	for _, value := range toggles.Releases {
 		if value.Name == name {

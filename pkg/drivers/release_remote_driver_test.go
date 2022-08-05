@@ -25,7 +25,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		driver:= drivers.ReleaseRemoteDriver{
 			Cache: toggleCacheMock,
 		}
-		assert.True(t, *driver.IsActive("TOGGLE_NAME"))
+		assert.True(t, *driver.IsActive("TOGGLE_NAME", make(map[string]interface{})))
 	})
 
 	t.Run("takes false value from cache", func(t *testing.T) {
@@ -43,7 +43,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		driver:= drivers.ReleaseRemoteDriver{
 			Cache: toggleCacheMock,
 		}
-		assert.False(t, *driver.IsActive("TOGGLE_NAME"))
+		assert.False(t, *driver.IsActive("TOGGLE_NAME", make(map[string]interface{})))
 	})
 
 	t.Run("returns false if not found", func(t *testing.T) {
@@ -60,7 +60,7 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		driver:= drivers.ReleaseRemoteDriver{
 			Cache: toggleCacheMock,
 		}
-		assert.Nil(t, driver.IsActive("TOGGLE_NAME"))
+		assert.Nil(t, driver.IsActive("TOGGLE_NAME", make(map[string]interface{})))
 	})
 
 	t.Run("returns false if not valid toggles", func(t *testing.T) {
@@ -74,6 +74,6 @@ func Test_Release_Remote_Driver(t *testing.T) {
 		driver:= drivers.ReleaseRemoteDriver{
 			Cache: toggleCacheMock,
 		}
-		assert.Nil(t, driver.IsActive("TOGGLE_NAME"))
+		assert.Nil(t, driver.IsActive("TOGGLE_NAME", make(map[string]interface{})))
 	})
 }

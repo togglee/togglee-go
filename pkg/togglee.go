@@ -26,10 +26,10 @@ func (h ToggleeBuilder) Create() *Togglee {
 }
 
 // IsActive -- retrieves the value of a toggle from the drivers
-func (h *Togglee) IsActive(name string) bool {
+func (h *Togglee) IsActive(name string, context map[string]interface{}) bool {
 	result := false
 	for _, driver := range h.drivers {
-		resultLocal := driver.IsActive(name)
+		resultLocal := driver.IsActive(name, context)
 		if resultLocal == nil {
 			continue
 		}

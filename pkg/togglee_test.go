@@ -18,11 +18,11 @@ func Test_Toggle_Is_False_If_Not_Exist(t *testing.T) {
 	defer controller.Finish()
 	name := faker.UUIDHyphenated()
 	driver := mocks.NewMockDriver(controller)
-	driver.EXPECT().IsActive(name).Return(nil)
+	driver.EXPECT().IsActive(name, make(map[string]interface{})).Return(nil)
 
 	togglee := ToggleeBuilder{}.AddDriver(driver).Create()
 
-	assert.False(t, togglee.IsActive(name), "defaults to false if does not exist")
+	assert.False(t, togglee.IsActive(name, make(map[string]interface{})), "defaults to false if does not exist")
 }
 
 func Test_Toggle_Is_True_If_Exist_In_Driver(t *testing.T) {
@@ -30,11 +30,11 @@ func Test_Toggle_Is_True_If_Exist_In_Driver(t *testing.T) {
 	defer controller.Finish()
 	name := faker.UUIDHyphenated()
 	driver := mocks.NewMockDriver(controller)
-	driver.EXPECT().IsActive(name).Return(boolToPointer(true))
+	driver.EXPECT().IsActive(name, make(map[string]interface{})).Return(boolToPointer(true))
 
 	togglee := ToggleeBuilder{}.AddDriver(driver).Create()
 
-	assert.True(t, togglee.IsActive(name), "is true in driver")
+	assert.True(t, togglee.IsActive(name, make(map[string]interface{})), "is true in driver")
 }
 
 func Test_Toggle_Is_False_If_Exist_In_Driver(t *testing.T) {
@@ -42,11 +42,11 @@ func Test_Toggle_Is_False_If_Exist_In_Driver(t *testing.T) {
 	defer controller.Finish()
 	name := faker.UUIDHyphenated()
 	driver := mocks.NewMockDriver(controller)
-	driver.EXPECT().IsActive(name).Return(boolToPointer(false))
+	driver.EXPECT().IsActive(name, make(map[string]interface{})).Return(boolToPointer(false))
 
 	togglee := ToggleeBuilder{}.AddDriver(driver).Create()
 
-	assert.False(t, togglee.IsActive(name), "is false in driver")
+	assert.False(t, togglee.IsActive(name, make(map[string]interface{})), "is false in driver")
 }
 
 func Test_Toggle_Multiple_Drivers_False(t *testing.T) {
@@ -55,12 +55,12 @@ func Test_Toggle_Multiple_Drivers_False(t *testing.T) {
 	name := faker.UUIDHyphenated()
 	driver := mocks.NewMockDriver(controller)
 	otherDriver := mocks.NewMockDriver(controller)
-	driver.EXPECT().IsActive(name).Return(nil)
-	otherDriver.EXPECT().IsActive(name).Return(boolToPointer(true))
+	driver.EXPECT().IsActive(name, make(map[string]interface{})).Return(nil)
+	otherDriver.EXPECT().IsActive(name, make(map[string]interface{})).Return(boolToPointer(true))
 
 	togglee := ToggleeBuilder{}.AddDriver(driver).AddDriver(otherDriver).Create()
 
-	assert.True(t, togglee.IsActive(name), "is false in driver")
+	assert.True(t, togglee.IsActive(name, make(map[string]interface{})), "is false in driver")
 }
 
 func Test_Toggle_Multiple_Drivers_False_Not_Exist(t *testing.T) {
@@ -69,12 +69,12 @@ func Test_Toggle_Multiple_Drivers_False_Not_Exist(t *testing.T) {
 	name := faker.UUIDHyphenated()
 	driver := mocks.NewMockDriver(controller)
 	otherDriver := mocks.NewMockDriver(controller)
-	driver.EXPECT().IsActive(name).Return(nil)
-	otherDriver.EXPECT().IsActive(name).Return(nil)
+	driver.EXPECT().IsActive(name, make(map[string]interface{})).Return(nil)
+	otherDriver.EXPECT().IsActive(name, make(map[string]interface{})).Return(nil)
 
 	togglee := ToggleeBuilder{}.AddDriver(driver).AddDriver(otherDriver).Create()
 
-	assert.False(t, togglee.IsActive(name), "is false in driver")
+	assert.False(t, togglee.IsActive(name, make(map[string]interface{})), "is false in driver")
 }
 
 func Test_Toggle_Multiple_Drivers_False_Exist(t *testing.T) {
@@ -83,12 +83,12 @@ func Test_Toggle_Multiple_Drivers_False_Exist(t *testing.T) {
 	name := faker.UUIDHyphenated()
 	driver := mocks.NewMockDriver(controller)
 	otherDriver := mocks.NewMockDriver(controller)
-	driver.EXPECT().IsActive(name).Return(boolToPointer(true))
-	otherDriver.EXPECT().IsActive(name).Return(boolToPointer(false))
+	driver.EXPECT().IsActive(name, make(map[string]interface{})).Return(boolToPointer(true))
+	otherDriver.EXPECT().IsActive(name, make(map[string]interface{})).Return(boolToPointer(false))
 
 	togglee := ToggleeBuilder{}.AddDriver(driver).AddDriver(otherDriver).Create()
 
-	assert.False(t, togglee.IsActive(name), "is false in driver")
+	assert.False(t, togglee.IsActive(name, make(map[string]interface{})), "is false in driver")
 }
 
 func Test_Toggle_Multiple_Drivers_False_Exist_Does_Not_Call_Next(t *testing.T) {
@@ -97,10 +97,10 @@ func Test_Toggle_Multiple_Drivers_False_Exist_Does_Not_Call_Next(t *testing.T) {
 	name := faker.UUIDHyphenated()
 	driver := mocks.NewMockDriver(controller)
 	otherDriver := mocks.NewMockDriver(controller)
-	driver.EXPECT().IsActive(name).Return(boolToPointer(false))
-	otherDriver.EXPECT().IsActive(name).Return(boolToPointer(true)).Times(0)
+	driver.EXPECT().IsActive(name, make(map[string]interface{})).Return(boolToPointer(false))
+	otherDriver.EXPECT().IsActive(name, make(map[string]interface{})).Return(boolToPointer(true)).Times(0)
 
 	togglee := ToggleeBuilder{}.AddDriver(driver).AddDriver(otherDriver).Create()
 
-	assert.False(t, togglee.IsActive(name), "is false in driver")
+	assert.False(t, togglee.IsActive(name, make(map[string]interface{})), "is false in driver")
 }
